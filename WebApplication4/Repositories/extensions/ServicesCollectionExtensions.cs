@@ -7,6 +7,8 @@ public static class ServicesCollectionExtensions
     public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services)
     {
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
 
         return services;
     }
