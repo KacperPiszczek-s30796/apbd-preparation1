@@ -74,8 +74,10 @@ public class OrderRepository: IOrderRepository
         await con.OpenAsync(token);
         command2.Parameters.AddWithValue("@result", result);
         var result2 = Convert.ToInt32(await command2.ExecuteScalarAsync(token));
-        if (result2 == 1) return null;
-        else if (result is not null)
+        if (result2 == 1)
+        {
+            return null;
+        }else if (result is not null)
         {
             if (!Convert.ToBoolean(UpdateOrderAsync(result, token))) result = null;
         }

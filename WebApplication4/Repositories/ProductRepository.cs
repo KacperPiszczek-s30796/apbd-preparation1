@@ -28,4 +28,18 @@ public class ProductRepository: IProductRepository
 
         return result == 1;
     }
+    public async Task<int> ProductGetPriceAsync(int productId, CancellationToken token = default)
+    {
+        const string query = """
+                             SELECT TOP 1 Product.Price FROM Product 
+                             WHERE Product.IdProduct = @productId;   
+                             """;
+
+        await using SqlConnection con = new(_connectionString);
+        await using SqlCommand command = new SqlCommand(query, con);
+        await con.OpenAsync(token);
+        command.Parameters.AddWithValue("@productId", productId);
+        var result = Convert.ToInt32(await command.ExecuteScalarAsync(token));
+        return result;
+    }
 }

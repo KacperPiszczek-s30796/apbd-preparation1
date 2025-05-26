@@ -2,5 +2,5 @@
 
 public interface IWarehouseRepository
 {
-    
+    public Task<bool> WarehouseExistsAsync(int WarehouseId, CancellationToken token = default);
 }

@@ -9,6 +9,7 @@ public static class ServicesCollectionExtensions
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IWarehouseRepository, WarehouseRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IProduct_WarehouseRepository, Product_WarehouseRepository>();
 
         return services;
     }
