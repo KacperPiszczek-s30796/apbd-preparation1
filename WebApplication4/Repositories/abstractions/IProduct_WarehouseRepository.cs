@@ -2,5 +2,5 @@
 
 public interface IProduct_WarehouseRepository
 {
-    public Task<bool> UpdateOrderAsync(int idWarehouse, int idProduct, int idOrder, int amount, int Price, CancellationToken token = default);
+    public Task<int?> UpdateOrderAsync(int idWarehouse, int idProduct, int? idOrder, int amount, int Price, CancellationToken token = default);
 }

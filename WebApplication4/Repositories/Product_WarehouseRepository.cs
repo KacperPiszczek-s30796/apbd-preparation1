@@ -13,11 +13,12 @@ public class Product_WarehouseRepository: IProduct_WarehouseRepository
                             throw new ArgumentNullException(nameof(cfg),
                                 "Default connection string is missing in configuration");
     }
-    public async Task<bool> UpdateOrderAsync(int idWarehouse, int idProduct, int idOrder, int amount,int Price, CancellationToken token = default)
+    public async Task<int?> UpdateOrderAsync(int idWarehouse, int idProduct, int? idOrder, int amount,int Price, CancellationToken token = default)
     {
         const string query = """
                              INSERT INTO Product_Warehouse (idWarehouse, idProduct, idOrder, amount, Price, CreatedAt)
-                             VALUES (@idWarehouse, @idProduct, @idOrder, @amount, @Price, @CreatedAt);
+                             VALUES (@idWarehouse, @idProduct, @idOrder, @amount, @Price, @CreatedAt)
+                             SELECT CAST(SCOPE_IDENTITY() AS int);
                              """;
         await using SqlConnection con = new(_connectionString);
         await using SqlCommand command = new SqlCommand(query, con);
@@ -28,19 +29,16 @@ public class Product_WarehouseRepository: IProduct_WarehouseRepository
         command.Parameters.AddWithValue("@amount", amount);
         command.Parameters.AddWithValue("@Price", Price);
         command.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
+        int? affectedRows = null;
         try
         {
-            int affectedRows = await command.ExecuteNonQueryAsync(token);
-            if (affectedRows == 0)
-            {
-                return false;
-            }
+            affectedRows = Convert.ToInt32(await command.ExecuteScalarAsync(token));
         }
         catch (SqlException ex)
         {
-            return false;
+            return null;
         }
-        return true;
+        return affectedRows;
     }
     
 }
